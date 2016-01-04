@@ -1,0 +1,17 @@
+{
+  "name": "stuttter/wp-term-locks",
+  "description": "Pretty locks for categories, tags, and other taxonomy terms",
+  "homepage": "https://github.com/stuttter/wp-term-locks",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=5.2",
+    "composer/installers": "^1.0"
+  },
+  "license": "GPLv2 or later",
+  "authors": [
+    {
+      "name": "John James Jacoby",
+      "email": "johnjamesjacoby@me.com"
+    }
+  ]
+}

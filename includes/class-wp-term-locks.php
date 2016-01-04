@@ -109,7 +109,7 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	public function row_actions( $actions = array(), $term = null ) {
 
 		// Bail if current user can manage
-		if ( current_user_can( 'manage_term_locksing' ) ) {
+		if ( current_user_can( 'manage_term_locks' ) ) {
 			return $actions;
 		}
 
@@ -169,8 +169,8 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 			return;
 		}
 
-		// Map capabilities
-		if ( current_user_can( 'manage_term_locksing' ) ) {
+		// Bail if user can manage
+		if ( current_user_can( 'manage_term_locks' ) ) {
 			return;
 		}
 
@@ -238,6 +238,11 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	 * @since 0.1.0
 	 */
 	public function edit_form_field( $term = false ) {
+
+		// Bail if user can't manage
+		if ( ! current_user_can( 'manage_term_locks' ) ) {
+			return;
+		}
 
 		// Locked?
 		$locks = $this->get_meta( $term->term_id );

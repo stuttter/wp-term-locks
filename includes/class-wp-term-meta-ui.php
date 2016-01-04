@@ -116,6 +116,9 @@ class WP_Term_Meta_UI {
 		$this->taxonomies = $this->get_taxonomies();
 		$this->fancy      = apply_filters( "wp_fancy_term_{$this->meta_key}", true );
 
+		// Register Meta
+		add_action( 'init', array( $this, 'register_meta' ) );
+
 		// Queries
 		add_action( 'create_term', array( $this, 'save_meta' ), 10, 2 );
 		add_action( 'edit_term',   array( $this, 'save_meta' ), 10, 2 );
@@ -145,6 +148,56 @@ class WP_Term_Meta_UI {
 			add_action( 'admin_init',         array( $this, 'admin_init' ) );
 			add_action( 'load-edit-tags.php', array( $this, 'edit_tags'  ) );
 		}
+	}
+
+	/**
+	 * Register term meta, key, and callbacks
+	 *
+	 * @since 0.1.5
+	 */
+	public function register_meta() {
+		register_meta(
+			'term',
+			$this->meta_key,
+			array( $this, 'sanitize_callback' ),
+			array( $this, 'auth_callback'     )
+		);
+	}
+
+	/**
+	 * Stub method for sanitizing meta data
+	 *
+	 * @since 0.1.5
+	 *
+	 * @param   mixed $data
+	 * @return  mixed
+	 */
+	public function sanitize_callback( $data = '' ) {
+		return $data;
+	}
+
+	/**
+	 * Stub method for authorizing the saving of meta data
+	 *
+	 * @since 0.1.5
+	 *
+	 * @param  bool    $allowed
+	 * @param  string  $meta_key
+	 * @param  int     $post_id
+	 * @param  int     $user_id
+	 * @param  string  $cap
+	 * @param  array   $caps
+	 *
+	 * @return boolean
+	 */
+	public function auth_callback( $allowed = false, $meta_key = '', $post_id = 0, $user_id = 0, $cap = '', $caps = array() ) {
+
+		// Bail if incorrect meta key
+		if ( $meta_key !== $this->meta_key ) {
+			return $allowed;
+		}
+
+		return $allowed;
 	}
 
 	/**

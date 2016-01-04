@@ -30,4 +30,4 @@ function _wp_term_locks() {
 	// Instantiate the main class
 	new WP_Term_Locks( $file );
 }
-add_action( 'plugins_loaded', '_wp_term_locks', 99 );
+add_action( 'init', '_wp_term_locks', 99 );

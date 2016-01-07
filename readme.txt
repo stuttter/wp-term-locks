@@ -48,7 +48,9 @@ This plugin requires [WP Term Meta](https://wordpress.org/plugins/wp-term-meta/ 
 
 = Does this plugin depend on any others? =
 
-Yes. Please install the [WP Term Meta](https://wordpress.org/plugins/wp-term-meta/ "Metadata, for taxonomy terms.") plugin.
+Not since WordPress 4.4.
+
+Install the [WP Term Meta](https://wordpress.org/plugins/wp-term-meta/ "Metadata, for taxonomy terms.") plugin if you're on an earlier version.
 
 = Does this create new database tables? =
 

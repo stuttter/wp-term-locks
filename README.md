@@ -1,8 +1,8 @@
 # WP Term Locks
 
-Pretty locks for categories, tags, and other taxonomy terms
+Lock categories, tags, and other taxonomy terms.
 
-WP Term Locks allows users to assign locks to any visible category, tag, or taxonomy term using a fancy lock picker, providing a customized look for their taxonomy terms.
+WP Term Locks allows administrators to lock taxonomy terms from being edited or deleted, providing security from authors & contributors that may try to modify them.
 
 # Installation
 

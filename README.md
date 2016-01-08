@@ -39,8 +39,7 @@ $terms = get_terms( 'category', array(
 
 	// Query by lock using the "wp-term-meta" plugin!
 	'meta_query' => array( array(
-		'key'   => 'lock',
-		'value' => '#c0ffee'
+		'key' => 'locks'
 	) )
 ) );
 ```

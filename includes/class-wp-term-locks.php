@@ -58,13 +58,13 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 
 		// Maybe manipulate row actions
 		foreach ( $this->taxonomies as $tax ) {
-			add_filter( "{$tax}_row_actions", array( $this, 'row_actions'  ), 10, 2 );
-			add_filter( 'term_name',          array( $this, 'term_name'    ), 99, 2 );
+			add_filter( "{$tax}_row_actions", array( $this, 'row_actions' ), 10, 2 );
 		}
 
 		// Terrible hacks
 		add_action( 'admin_head-edit-tags.php', array( $this, 'terrible_hack' ), 10    );
 		add_filter( 'map_meta_cap',             array( $this, 'map_meta_cap'  ), 99, 4 );
+		add_filter( 'term_name',                array( $this, 'term_name'     ), 99, 2 );
 	}
 
 	/** Assets ****************************************************************/
@@ -192,25 +192,21 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 		if ( 'manage_categories' === $cap ) {
 
 			// No term passed, so don't bother
-			if ( empty( $args ) || user_can( $user_id, 'manage_term_locks', $args ) ) {
+			if ( empty( $args ) || is_super_admin() ) {
 				return $caps;
 			}
 
 			// Get meta data for term ID
 			$locks = $this->get_meta( $args[0]->term_id );
 
-			if ( ! empty( $locks ) ) {
-				$caps = array();
+			// No locks so return caps
+			if ( empty( $locks ) ) {
+				return $caps;
+			}
 
-				// Edit
-				if ( ! empty( $locks['edit'] ) ) {
-					$caps[] = 'do_not_allow';
-				}
-
-				// Delete
-				if ( ! empty( $locks['delete'] ) ) {
-					$caps[] = 'do_not_allow';
-				}
+			// Edit
+			if ( ! empty( $locks['edit'] ) || ! empty( $locks['delete'] ) ) {
+				$caps = array( 'do_not_allow' );
 			}
 
 		// Trying to manage term locks

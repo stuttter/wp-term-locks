@@ -22,12 +22,12 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	/**
 	 * @var string Plugin version
 	 */
-	public $version = '0.2.0';
+	public $version = '0.1.0';
 
 	/**
 	 * @var string Database version
 	 */
-	public $db_version = 201601070001;
+	public $db_version = 201601250001;
 
 	/**
 	 * @var string Metadata key
@@ -38,8 +38,6 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	 * @var bool No column for lock metadata
 	 */
 	public $has_column = false;
-
-	public $taxonomies = array( 'category', 'post_tag' );
 
 	/**
 	 * Hook into queries, admin screens, and more!
@@ -190,26 +188,34 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	 */
 	public function map_meta_cap( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
 
-		// Trying to manage categories
+		// Trying to manage terms
 		if ( 'manage_categories' === $cap ) {
 
 			// No term passed, so don't bother
-			if ( empty( $args ) ) {
+			if ( empty( $args ) || user_can( $user_id, 'manage_term_locks', $args ) ) {
 				return $caps;
 			}
 
 			// Get meta data for term ID
 			$locks = $this->get_meta( $args[0]->term_id );
 
-			// Edit
-			if ( ! empty( $locks['edit'] ) ) {
-				$caps = array( 'edit_term' );
+			if ( ! empty( $locks ) ) {
+				$caps = array();
+
+				// Edit
+				if ( ! empty( $locks['edit'] ) ) {
+					$caps[] = 'do_not_allow';
+				}
+
+				// Delete
+				if ( ! empty( $locks['delete'] ) ) {
+					$caps[] = 'do_not_allow';
+				}
 			}
 
-			// Delete
-			if ( ! empty( $locks['delete'] ) ) {
-				$caps = array( 'delete_term' );
-			}
+		// Trying to manage term locks
+		} elseif ( 'manage_term_locks' === $cap ) {
+			$caps = array( $cap );
 		}
 
 		return $caps;

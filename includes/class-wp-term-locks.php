@@ -39,6 +39,8 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	 */
 	public $has_column = false;
 
+	public $taxonomies = array( 'category', 'post_tag' );
+
 	/**
 	 * Hook into queries, admin screens, and more!
 	 *
@@ -62,8 +64,9 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 			add_filter( 'term_name',          array( $this, 'term_name'    ), 99, 2 );
 		}
 
-		// Maybe can't edit this tag
-		add_action( 'admin_action_edit', array( $this, 'maybe_map_meta_cap' ) );
+		// Terrible hacks
+		add_action( 'admin_head-edit-tags.php', array( $this, 'terrible_hack' ), 10    );
+		add_filter( 'map_meta_cap',             array( $this, 'map_meta_cap'  ), 99, 4 );
 	}
 
 	/** Assets ****************************************************************/
@@ -153,29 +156,25 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	}
 
 	/**
-	 * Maybe filter `map_meta_cap` if taxonomy fits
+	 * Terrible hack
 	 *
 	 * @since 0.1.0
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/35614
+	 *
+	 * @global WP_Terms_List_Table_2 $wp_list_table
 	 */
-	public function maybe_map_meta_cap() {
+	public function terrible_hack() {
+		global $wp_list_table;
 
-		// Bail if not one of these taxonomies
-		if ( empty( $_GET['tag_ID'] ) || ! in_array( get_current_screen()->taxonomy, $this->taxonomies, true ) ) {
-			return;
-		}
+		// Pull in the terrible hack file
+		require_once dirname( __FILE__ ) . '/class-wp-term-locks-list-table.php';
 
-		// Bail if user can manage
-		if ( current_user_can( 'manage_term_locks' ) ) {
-			return;
-		}
+		// Override the list table global
+		$wp_list_table = new WP_Term_Locks_List_Table();
 
-		// Get the current taxonomy name
-		$tax                    = get_current_screen()->taxonomy;
-		$this->current_taxonomy = get_taxonomy( $tax );
-		$this->current_term     = get_term( $_GET['tag_ID'], $tax );
-
-		// Add the filter
-		add_filter( 'map_meta_cap', array( $this, 'map_meta_cap' ), 99, 2 );
+		// Re-prepare the items with a new object
+		$wp_list_table->prepare_items();
 	}
 
 	/**
@@ -189,32 +188,28 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	 * @param  int     $user_id
 	 * @param  array   $args
 	 */
-	public function map_meta_cap( $caps = array(), $cap = '' ) {
+	public function map_meta_cap( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
 
-		// Edit or Delete term
-		switch ( $cap ) {
+		// Trying to manage categories
+		if ( 'manage_categories' === $cap ) {
+
+			// No term passed, so don't bother
+			if ( empty( $args ) ) {
+				return $caps;
+			}
+
+			// Get meta data for term ID
+			$locks = $this->get_meta( $args[0]->term_id );
 
 			// Edit
-			case $this->current_taxonomy->cap->edit_terms :
-
-				// Do not allow if locked
-				$locks = $this->get_meta( $this->current_term->term_id );
-				if ( ! empty( $locks['edit'] ) ) {
-					$caps = array( 'do_not_allow' );
-				}
-
-				break;
+			if ( ! empty( $locks['edit'] ) ) {
+				$caps = array( 'edit_term' );
+			}
 
 			// Delete
-			case $this->current_taxonomy->cap->delete_terms :
-
-				// Do not allow if locked
-				$locks = $this->get_meta( $this->current_term->term_id );
-				if ( ! empty( $locks['delete'] ) ) {
-					$caps = array( 'do_not_allow' );
-				}
-
-				break;
+			if ( ! empty( $locks['delete'] ) ) {
+				$caps = array( 'delete_term' );
+			}
 		}
 
 		return $caps;

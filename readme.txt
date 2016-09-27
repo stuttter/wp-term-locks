@@ -84,6 +84,7 @@ http://github.com/stuttter/wp-term-locks/
 * Remove list-table override class
 * Bump minimum WordPress version to 4.7
 * Restructure files for improved mu-plugins support
+* Clean-up unused assets
 
 = 0.2.0 =
 * Update base class

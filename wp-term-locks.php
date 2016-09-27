@@ -24,11 +24,11 @@ defined( 'ABSPATH' ) || exit;
 function _wp_term_locks() {
 
 	// Setup the main file
-	$plugin_path = plugin_dir_path( __FILE__ );
+	$plugin_path = plugin_dir_path( __FILE__ ) . 'wp-term-locks/';
 
 	// Classes
-	require_once $plugin_path . '/includes/class-wp-term-meta-ui.php';
-	require_once $plugin_path . '/includes/class-wp-term-locks.php';
+	require_once $plugin_path . 'includes/class-wp-term-meta-ui.php';
+	require_once $plugin_path . 'includes/class-wp-term-locks.php';
 }
 add_action( 'plugins_loaded', '_wp_term_locks' );
 

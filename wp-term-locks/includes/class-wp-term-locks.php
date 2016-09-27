@@ -69,17 +69,6 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	/** Assets ****************************************************************/
 
 	/**
-	 * Enqueue quick-edit JS
-	 *
-	 * @since 0.1.0
-	 */
-	public function enqueue_scripts() {
-
-		// Enqueue fancy locking; includes quick-edit
-		wp_enqueue_script( 'term-locks', $this->url . 'assets/js/term-locks.js', array( 'wp-lock-picker' ), $this->db_version, true );
-	}
-
-	/**
 	 * Add help tabs for `lock` column
 	 *
 	 * @since 0.1.2

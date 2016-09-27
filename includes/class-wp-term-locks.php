@@ -62,9 +62,8 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 		}
 
 		// Terrible hacks
-		add_action( 'admin_head-edit-tags.php', array( $this, 'terrible_hack' ), 10    );
-		add_filter( 'map_meta_cap',             array( $this, 'map_meta_cap'  ), 99, 4 );
-		add_filter( 'term_name',                array( $this, 'term_name'     ), 99, 2 );
+		add_filter( 'map_meta_cap', array( $this, 'map_meta_cap'  ), 99, 4 );
+		add_filter( 'term_name',    array( $this, 'term_name'     ), 99, 2 );
 	}
 
 	/** Assets ****************************************************************/
@@ -154,28 +153,6 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	}
 
 	/**
-	 * Terrible hack
-	 *
-	 * @since 0.1.0
-	 *
-	 * @see https://core.trac.wordpress.org/ticket/35614
-	 *
-	 * @global WP_Terms_List_Table_2 $wp_list_table
-	 */
-	public function terrible_hack() {
-		global $wp_list_table;
-
-		// Pull in the terrible hack file
-		require_once dirname( __FILE__ ) . '/class-wp-term-locks-list-table.php';
-
-		// Override the list table global
-		$wp_list_table = new WP_Term_Locks_List_Table();
-
-		// Re-prepare the items with a new object
-		$wp_list_table->prepare_items();
-	}
-
-	/**
 	 * Filter `map_meta_cap` and conditionally disallow editing & deleting if
 	 * term is locked.
 	 *
@@ -188,30 +165,47 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	 */
 	public function map_meta_cap( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
 
-		// Trying to manage terms
-		if ( 'manage_categories' === $cap ) {
+		// Allow managing of term locks
+		if ( 'manage_term_locks' === $cap ) {
+			$caps = array( $cap );
 
-			// No term passed, so don't bother
+		// Map manage/delete/edit
+		} elseif ( in_array( $cap, array( 'manage_categories', 'delete_term', 'edit_term' ) ) ) {
+
+			// Bail if no term or is super admin
 			if ( empty( $args ) || is_super_admin() ) {
 				return $caps;
 			}
 
 			// Get meta data for term ID
-			$locks = $this->get_meta( $args[0]->term_id );
+			$locks = $this->get_meta( $args[0] );
 
 			// No locks so return caps
 			if ( empty( $locks ) ) {
 				return $caps;
 			}
 
-			// Edit
-			if ( ! empty( $locks['edit'] ) || ! empty( $locks['delete'] ) ) {
-				$caps = array( 'do_not_allow' );
+			// Which cap?
+			switch ( $cap ) {
+				case 'manage_categories' :
+					if ( ! empty( $locks['edit'] ) || ! empty( $locks['delete'] ) ) {
+						$caps = array( 'do_not_allow' );
+					}
+					break;
+				case 'delete_term' :
+					if ( ! empty( $locks['delete'] ) ) {
+						$caps = array( 'do_not_allow' );
+					}
+					break;
+				case 'edit_term' :
+					if ( ! empty( $locks['edit'] ) ) {
+						$caps = array( 'do_not_allow' );
+					}
+					break;
+				case 'manage_term_locks' :
+					$caps = array( $cap );
+					break;
 			}
-
-		// Trying to manage term locks
-		} elseif ( 'manage_term_locks' === $cap ) {
-			$caps = array( $cap );
 		}
 
 		return $caps;

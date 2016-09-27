@@ -7,8 +7,8 @@
  * Author URI:  https://profiles.wordpress.org/johnjamesjacoby/
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Description: Locks for categories, tags, and other taxonomy terms
- * Version:     0.2.0
+ * Description: Prevent categories, tags, and other taxonomy terms from being edited or deleted
+ * Version:     1.0.0
  * Text Domain: wp-term-locks
  * Domain Path: /assets/lang/
  */

@@ -1,24 +1,18 @@
 === WP Term Locks ===
 Contributors: johnjamesjacoby, stuttter
 Tags: taxonomy, term, meta, metadata, lock, locks
-Requires at least: 4.4
-Tested up to: 4.4
-Stable tag: 0.2.0
+Tested up to: 4.8
+Requires at least: 4.7
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9Q4F4EL5YJ62J
 
 == Description ==
 
-Lock categories, tags, and other taxonomy terms.
+Prevent categories, tags, and other taxonomy terms from being edited or deleted
 
-WP Term Locks allows administrators to lock taxonomy terms from being edited or deleted, providing security from authors & contributors that may try to modify them.
-
-= Dependencies =
-
-Not since WordPress 4.4.
-
-Install the [WP Term Meta](https://wordpress.org/plugins/wp-term-meta/ "Metadata, for taxonomy terms.") plugin if you're on an earlier version.
+WP Term Locks allows administrators to lock taxonomy terms from being edited or deleted by other capable users
 
 = Also checkout =
 
@@ -47,12 +41,6 @@ Install the [WP Term Meta](https://wordpress.org/plugins/wp-term-meta/ "Metadata
 * No further setup or configuration is necessary.
 
 == Frequently Asked Questions ==
-
-= Does this plugin depend on any others? =
-
-Not since WordPress 4.4.
-
-Install the [WP Term Meta](https://wordpress.org/plugins/wp-term-meta/ "Metadata, for taxonomy terms.") plugin if you're on an earlier version.
 
 = Does this create new database tables? =
 
@@ -91,6 +79,11 @@ The WordPress support forums: https://wordpress.org/support/plugin/wp-term-locks
 http://github.com/stuttter/wp-term-locks/
 
 == Changelog ==
+
+= 1.0.0 =
+* Remove list-table override class
+* Bump minimum WordPress version to 4.7
+* Restructure files for improved mu-plugins support
 
 = 0.2.0 =
 * Update base class

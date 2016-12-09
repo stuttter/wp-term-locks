@@ -8,9 +8,9 @@
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Prevent categories, tags, and other taxonomy terms from being edited or deleted
- * Version:     1.0.0
+ * Version:     1.0.1
  * Text Domain: wp-term-locks
- * Domain Path: /assets/lang/
+ * Domain Path: /wp-term-locks/assets/languages/
  */
 
 // Exit if accessed directly

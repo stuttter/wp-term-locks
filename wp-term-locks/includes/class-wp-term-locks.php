@@ -22,12 +22,12 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 	/**
 	 * @var string Plugin version
 	 */
-	public $version = '0.1.0';
+	public $version = '1.0.1';
 
 	/**
 	 * @var string Database version
 	 */
-	public $db_version = 201601250001;
+	public $db_version = 201601290001;
 
 	/**
 	 * @var string Metadata key
@@ -156,7 +156,11 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 
 		// Allow managing of term locks
 		if ( 'manage_term_locks' === $cap ) {
-			$caps = array( $cap );
+
+			// Multisite is limited to super admins, single site limited to admins
+			$caps = is_multisite()
+				? array( $cap )
+				: array( 'manage_options' );
 
 		// Map manage/delete/edit
 		} elseif ( in_array( $cap, array( 'manage_categories', 'delete_term', 'edit_term' ) ) ) {
@@ -190,9 +194,6 @@ final class WP_Term_Locks extends WP_Term_Meta_UI {
 					if ( ! empty( $locks['edit'] ) ) {
 						$caps = array( 'do_not_allow' );
 					}
-					break;
-				case 'manage_term_locks' :
-					$caps = array( $cap );
 					break;
 			}
 		}

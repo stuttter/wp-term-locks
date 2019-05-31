@@ -1,12 +1,13 @@
 === WP Term Locks ===
-Contributors: johnjamesjacoby, stuttter
-Tags: taxonomy, term, meta, metadata, lock, locks
-Tested up to: 4.8
-Requires at least: 4.7
-Stable tag: 1.0.1
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9Q4F4EL5YJ62J
+Contributors:      johnjamesjacoby, stuttter
+Tags:              taxonomy, term, meta, metadata, lock, locks
+Requires PHP:      5.6.20
+Requires at least: 4.4
+Tested up to:      5.2
+Stable tag:        2.0.0
+License:           GPLv2 or later
+License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+Donate link:       https://ko-fi.com/jjj
 
 == Description ==
 
@@ -80,6 +81,9 @@ $terms = get_terms( 'category', array(
 http://github.com/stuttter/wp-term-locks/
 
 == Changelog ==
+
+= 2.0.0 =
+* Update base class
 
 = 1.0.1 =
 * Fix single-site capabilities check

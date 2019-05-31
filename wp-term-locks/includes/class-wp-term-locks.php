@@ -17,17 +17,17 @@ if ( ! class_exists( 'WP_Term_Locks' ) ) :
  *
  * @since 0.1.0
  */
-final class WP_Term_Locks extends WP_Term_Meta_UI {
+final class WP_Term_Locks extends JJJ\WP\Term\Meta\UI {
 
 	/**
 	 * @var string Plugin version
 	 */
-	public $version = '1.0.1';
+	public $version = '2.0.0';
 
 	/**
 	 * @var string Database version
 	 */
-	public $db_version = 201601290001;
+	public $db_version = 201905300001;
 
 	/**
 	 * @var string Metadata key

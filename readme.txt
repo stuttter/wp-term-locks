@@ -9,6 +9,8 @@ License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Donate link:       https://ko-fi.com/jjj
 
+Protect categories, tags, and other taxonomy terms from edits and deletion.
+
 == Description ==
 
 Prevent categories, tags, and other taxonomy terms from being edited or deleted
